@@ -1,5 +1,6 @@
 #ifndef SPHERE_H
 #define SPHERE_H
+
 //==============================================================================================
 // Originally written in 2016 by Peter Shirley <ptrshrl@gmail.com>
 //
@@ -13,19 +14,22 @@
 
 #include "hittable.h"
 
-
-class sphere : public hittable {
+class sphere : public hittable
+{
   public:
     sphere(const point3& center, double radius, shared_ptr<material> mat)
-      : center(center), radius(std::fmax(0,radius)), mat(mat) {}
+        : center(center), radius(std::fmax(0, radius)), mat(mat)
+    {
+    }
 
-    bool hit(const ray& r, interval ray_t, hit_record& rec) const override {
+    bool hit(const ray& r, interval ray_t, hit_record& rec) const override
+    {
         vec3 oc = center - r.origin();
         auto a = r.direction().length_squared();
         auto h = dot(r.direction(), oc);
-        auto c = oc.length_squared() - radius*radius;
+        auto c = oc.length_squared() - radius * radius;
 
-        auto discriminant = h*h - a*c;
+        auto discriminant = h * h - a * c;
         if (discriminant < 0)
             return false;
 
@@ -33,7 +37,8 @@ class sphere : public hittable {
 
         // Find the nearest root that lies in the acceptable range.
         auto root = (h - sqrtd) / a;
-        if (!ray_t.surrounds(root)) {
+        if (!ray_t.surrounds(root))
+        {
             root = (h + sqrtd) / a;
             if (!ray_t.surrounds(root))
                 return false;
@@ -53,6 +58,5 @@ class sphere : public hittable {
     double radius;
     shared_ptr<material> mat;
 };
-
 
 #endif
